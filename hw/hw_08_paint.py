@@ -16,6 +16,10 @@ shape_sel = 0
 
 drawing = False
 
+amt_colors = 10
+
+br_size = 25
+
 def setup():
     size(1000,500)
     global color_bool
@@ -30,12 +34,10 @@ def draw():
     
     
 def color_selector():
-    print("cs")
     cs_disp()
     cs_logic()
     
 def cs_disp():
-    amt_colors = 10
     
     rect(0,0,width,height/amt_colors)
     for i in range(amt_colors):
@@ -44,14 +46,17 @@ def cs_disp():
 
 def cs_logic():
     for i in range(amt_colors):
-        if mouseX > ((i*width)/amt_colors) and mouseX < (((i*width)/amt_colors)+(width/amt_colors)) and mouseY <= width/amt_colors:
+        if mouse_x > ((i*width)/amt_colors) and mouse_x < (((i*width)/amt_colors)+(width/amt_colors)) and mouse_y <= height/amt_colors:
             for a in range(amt_colors):
                 color_bool[a] = False
             color_bool[i] = True
-            
+    
+    for i in range(amt_colors):
+        if color_bool[i]:
+            fill(colors[i])
+    
             
 def shape_selector():
-    print("ss")
     if shape_sel == 0:
         square_sel()
     elif shape_sel == 1:
@@ -60,18 +65,21 @@ def shape_selector():
         tri_sel()
         
 def square_sel():
-    print("square sel")
+    square(mouse_x-br_size/2,mouse_y-br_size/2,br_size)
         
 def circle_sel():
-    print("circle sel")
+    circle(mouse_x,mouse_y,br_size)
         
 def tri_sel():
-    print("triangle sel")
+    triangle(mouse_x, mouse_y-br_size/2,mouse_x-br_size/2,mouse_y+br_size/2,mouse_x+br_size/2,mouse_y+br_size/2)
     
-def keyPressed():
+def key_pressed():
     if key == "s":
-        shape_sel += 1
+        global shape_sel
+        print(shape_sel)
+        shape_sel = shape_sel + 1
+        
         if shape_sel == 3:
-            shape_sel == 0
-    if key == " ":
-        drawing = !drawing
+            shape_sel = 0
+            
+
