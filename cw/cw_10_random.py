@@ -9,7 +9,7 @@ def setup():
         star_list.append({
             "x":random(width),
             "y":random(height),
-            "c":color(random(255),random(255),random(255))})
+            "c":color(random(255))})
     
     
 def draw():
@@ -33,7 +33,7 @@ def fake_stars():
                 point(x*width/amt+random(-width/amt,width/amt),y*height/amt+random(-height/amt,height/amt))
                 
 def real_stars():
+    background(0)
     for i in range(len(star_list)):
         stroke(star_list[i]["c"])
-        stroke_weight(random(10))
         point(star_list[i]["x"],star_list[i]["y"])
