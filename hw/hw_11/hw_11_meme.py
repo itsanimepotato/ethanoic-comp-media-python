@@ -1,44 +1,43 @@
 
-import requests
-import json
-
-global img_url
-global memes
-
-img_url = "https://i.imgflip.com/30b1gx.jpg"
-memes = {}
+url_list = []
+image_list = []
+current_img = "https://thunderdungeon.com/wp-content/uploads/2025/07/programming-memes-3-20250722.jpg"
+current_text = "yeah"
+txt_list = ["wow", "real", "that is crazy", "cool", "woah"]
 
 def setup():
-    size(750,750)
+    size(1000,1000)
     background(255)
-    text_align(CENTER,CENTER)
-    text("wait a bit...",width/2,height/2)
-    get_meme_list()
+    start_image()
+    output_img()
+    #output_txt()
+   
+def key_pressed():
+    if key == 'c':
+        output_img()
+        #output_txt()
 
-def draw():
-    get_meme()
-    show_meme()
     
-def get_meme_list():
-
-    print("getting memes")
-    endpoint = "https://api.imgflip.com/get_memes"
-    response = requests.get(endpoint)
-    data = response.json()
-    print("got memes:")
-    print(data)
-    memes = data["data"]["memes"]
-
-
-def get_meme():
-    amt_memes = len(memes)
-    rand_id = int(random(amt_memes))
-    selected_meme = memes[int(rand_id)]
-    print("selected meme:")
-    print(selected_meme)
+def start_image():
+    url_list.append("https://thunderdungeon.com/wp-content/uploads/2025/07/programming-memes-6-20250722.jpg")
+    url_list.append("https://thunderdungeon.com/wp-content/uploads/2025/07/programming-memes-8-20250722.jpg")
+    url_list.append("https://thunderdungeon.com/wp-content/uploads/2025/07/programming-memes-10-20250722.jpg")
+    url_list.append("https://thunderdungeon.com/wp-content/uploads/2025/07/programming-memes-11-20250722.jpg")
+    url_list.append("https://thunderdungeon.com/wp-content/uploads/2025/07/programming-memes-14-20250722.jpg")                      
+    print(url_list)
     
-    img_url = selected_meme["url"]
-    
-def show_meme():
-    img = load_image(img_url)
-    image(img,0,0)
+    for i in range(len(url_list)):
+        img = load_image(url_list[i])
+        image_list.append(img)
+ 
+ 
+def output_img():
+        background(255)
+        num = int(random(len(image_list)))
+        current_image = image_list[num]
+        image(image_list[num],0,0)
+
+def output_txt():
+    num = int(random(len(txt_list)))
+    current_text = str(txt_list[num])
+    text(current_text, width/2,height-text_size)
