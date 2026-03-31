@@ -1,4 +1,3 @@
-
 colors = [color(0),
           color(255,0,0),
           color(0,255,0),
@@ -58,7 +57,6 @@ def color_selector():
     cs_logic()
     
 def cs_disp():
-    
     rect(0,0,width,height/amt_colors)
     for i in range(amt_colors):
         fill(colors[i])
@@ -68,16 +66,16 @@ def cs_disp():
 
 def cs_logic():
     for i in range(amt_colors):
+        if color_bool[i]:
+            fill(colors[i])
+    
+def mouse_pressed():
+    for i in range(amt_colors):
         if mouse_x > ((i*width)/amt_colors) and mouse_x < (((i*width)/amt_colors)+(width/amt_colors)) and mouse_y <= height/amt_colors:
             for a in range(amt_colors):
                 color_bool[a] = False
             color_bool[i] = True
-    
-    for i in range(amt_colors):
-        if color_bool[i]:
-            fill(colors[i])
-    
-            
+
 def shape_selector():
     if drawing:
         if shape_sel == 0:
@@ -170,6 +168,7 @@ def start_info():
     fill(0)
     text_align(LEFT,TOP)
     text_size(25) #make font bigger
+    text("Hover over the color and click to change the brush color", 0, width/10+10)
     
     #put text in bottom left (press this to do this)
     text("Press LEFT to make more vertices of scribble", 0, height-50)
@@ -183,4 +182,3 @@ def start_info():
     text("Press r to reset canvas", width, height-25)
     text("Press b to change brush", width, height-50)
     text("Press e to erase in a circle (same as brush size)", width, height-75)
-

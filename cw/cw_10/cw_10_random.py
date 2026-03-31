@@ -26,3 +26,4 @@ def real_stars():
         stroke_weight(rand_weight)
         stroke(star_list[i]["c"])
         point(star_list[i]["x"],star_list[i]["y"])
+        

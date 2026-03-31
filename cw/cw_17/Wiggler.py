@@ -1,5 +1,4 @@
 # PY5 IMPORTED MODE CODE
-
 class Wiggler:
     def __init__(self, w, h):
         speed = 5
