@@ -18,6 +18,12 @@ class Ball:
             self.vel *= -1
             other.vel *= -1
     
+    def forces(self,other):
+        self.gravity(other)
+    
+    def gravity(self,other):
+        print(other)
+    
     def display(self):
         circle(self.x,self.y,self.r)
 
@@ -27,7 +33,7 @@ startVel = 5
 startAcc = 5
 
 def setup():
-    size(750,750)
+    size(500,500)
     global balls
     for i in range(ballCount):
         balls.append(Ball(int(random(width-r)),int(random(height-r)),-random(startVel),random(startVel),-random(startVel),random(startVel)))
