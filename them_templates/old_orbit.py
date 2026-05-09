@@ -44,7 +44,11 @@ class Ball:
         g = 6.674 * pow(10,-11)
         rSq = r * r
         return ab*(g/rSq)
-        
+    
+    def damping(self):
+        rev = -1 * 0.5 * self.acc
+        return rev
+    
     def move(self):
         self.vel += self.acc
         self.pos += self.vel
@@ -84,4 +88,5 @@ def draw():
         for o in range(ballCount):
             balls[i].collision(balls[o])
             balls[i].apply_force(balls[i].gravity())
+            balls[i].apply_force(balls[i].damping())
             
