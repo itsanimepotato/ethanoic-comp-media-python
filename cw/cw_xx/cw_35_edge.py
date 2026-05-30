@@ -4,7 +4,7 @@ threshold = 10
 def setup():
     global img
     size(500, 500)
-    img = load_image("image.jpg")
+    img = load_image("images/control.jpg")
     img.resize(width, height)
     image(img, 0, 0)
     load_pixels()
