@@ -1,65 +1,64 @@
 #S7
 
 import numpy as np
-import matplotlib.colors as mp
 
 draw_circle_bool = False
-chopped_bool = False
-wave_bool = False
 
-dc = 50
+smooth_bool = False
+static_bool = False
 
-def setup(): #S4
+tint_amt = 128
+
+#S4
+def setup(): 
     size(500,500)
     background(0)
     
     global og
     
-    for x in range(width):
-        for y in range(height):
-            #stroke(remap(x,0,width,0,255),remap(y,0,height,0,255),0)
-            stroke(x,y,0)
-            point(x,y)
-            
+    #makes the background
+    bg()
+    
     load_np_pixels()
     og = np_pixels.copy()
-
-            
-            
-def draw(): #S4
-    if wave_bool:
-        wave()
     
-    if draw_circle_bool:
-        draw_circle(dc)
-        
-    if chopped_bool:
-        chopped(0,0,int(width/2),int(height/2))
+    #makes the background leveled
+    chopped(0,0,width,height)
 
+            
+            
+def draw(): 
+    if draw_circle_bool:
+        draw_circle()
+        
+
+#S5
 def key_pressed():
-    global draw_circle_bool, chopped_bool, wave_bool
-    if key == 'd': #S5
+    global draw_circle_bool, chopped_bool
+    if key == 'd': #turns on the rotating circle
         draw_circle_bool = not draw_circle_bool
         print("draw circle")
         
-    if key == 'c': #S5
-        chopped_bool = not chopped_bool
-        print("chopped")
+    if key == '1':
+        smooth_bool = True
+    if key == '2':
+        static_bool = True
 
-    if key == 'w': #S5
-        wave_bool = not wave_bool
-        print("wave")
 
-def draw_circle(r):
-    # draws a circle filled with random colors #S6
-    if is_mouse_pressed: #S5
-        for x in range(width):
-            for y in range(height):
-                d = dist(mouse_x, mouse_y,x,y)
-                if d < r:
-                    stroke(random(255),random(255),random(255)) #S2 S3
-                    point(x,y) #S1
-                
+def draw_circle():
+    #creates a rotating circle around the center #S6
+    push_matrix()
+    
+    r = 50
+    translate(width/2,height/2)
+    s = r * sin(radians(frame_count)) 
+    c = r * cos(radians(frame_count))
+    
+    color_mode(HSB,360,100,100)
+    fill(frame_count%360,100,100)
+    circle(c + random(-5,5),s + random(-5,5),50)
+    
+    pop_matrix()
     
 def chopped(x,y,h,k):
     np_pixels[x:x+h,y:y+k,1] = np.clip(np.round(og[x:x+h,y:y+k,1],-1), 0, 255)
@@ -67,12 +66,53 @@ def chopped(x,y,h,k):
     np_pixels[x:x+h,y:y+k,3] = np.clip(np.round(og[x:x+h,y:y+k,3],-1), 0, 255)
     update_np_pixels()
     
-def wave():
-    for x in range(width):
-        for y in range(height):
-            #stroke(remap(x,0,width,0,255),remap(y,0,height,0,255),0)
-            stroke((x+frame_count)%255,y,0)
-            point(x,y)
-            
-    load_np_pixels()
-            
+def bg():
+    global og
+    if smooth_bool:
+    #makes the background rainbow
+        for x in range(width):
+            for y in range(height):
+                stroke(x,y,0) #S2 + 3
+                point(x,y) #S1
+        return
+    
+    if static_bool:
+    #makes the background static
+        img = load_image("static.jpg")
+        img.resize(width,height)
+        image(img,0,0)
+        
+        return
+    
+    rand = int(random(2))
+    if rand == 0:
+        print("smooth bg")
+        for x in range(width):
+            for y in range(height):
+                stroke(x,y,0) #S2 + 3
+                point(x,y) #S1
+    else:
+        print("smooth bg")
+        img = load_image("static.jpg")
+        img.resize(width,height)
+        image(img,0,0)
+        
+        load_np_pixels()
+        og = np_pixels.copy()
+
+        np_pixels[int(width/2):,:int(height/2),1] = np.clip(og[int(width/2):,:int(height/2),1] + tint_amt, 0, 255)
+        np_pixels[int(width/2):,:int(height/2),2] = np.clip(og[int(width/2):,:int(height/2),1] + tint_amt, 0, 255)
+        np_pixels[int(width/2):,:int(height/2),3] = np.clip(og[int(width/2):,:int(height/2),1] - tint_amt, 0, 255)
+    
+        np_pixels[:int(width/2),int(height/2):,1] = np.clip(og[:int(width/2),int(height/2):,2] + tint_amt, 0, 255)
+        np_pixels[:int(width/2),int(height/2):,2] = np.clip(og[:int(width/2),int(height/2):,2] - tint_amt, 0, 255)
+        np_pixels[:int(width/2),int(height/2):,3] = np.clip(og[:int(width/2),int(height/2):,2] + tint_amt, 0, 255)
+
+
+        np_pixels[int(width/2):,int(height/2):,1] = np.clip(og[int(width/2):,int(height/2):,3] - tint_amt, 0, 255)
+        np_pixels[int(width/2):,int(height/2):,2] = np.clip(og[int(width/2):,int(height/2):,3] + tint_amt, 0, 255)
+        np_pixels[int(width/2):,int(height/2):,3] = np.clip(og[int(width/2):,int(height/2):,3] + tint_amt, 0, 255)
+        
+        np_pixels[:,:,0] += int(random(frame_count%255))
+        
+        update_np_pixels()
