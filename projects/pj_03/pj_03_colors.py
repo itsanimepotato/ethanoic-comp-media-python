@@ -34,7 +34,10 @@ class Text:
         text("Press F to add color (to edge of scribble and inside of circle)", self.w, self.h+50)
         
         fill(4*frame_count%360,100,100)
-        text("Press 1 to reset to either background", self.w, self.h+75)
+        text("Press L to level the color", self.w, self.h+75)
+        
+        fill(5*frame_count%360,100,100)
+        text("Press 1 to reset to either background", self.w, self.h+100)
         pop_matrix()
 
 
